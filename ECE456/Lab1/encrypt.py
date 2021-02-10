@@ -22,7 +22,7 @@ def readData(filename, perm):
 def desEncrypt(data, key):
     l = data[:1]
     r = data[1:]
-    out_r = int.from_bytes(1, byteorder="big") ^ int.from_bytes(key, byteorder="big")
+    out_r = int.from_bytes(l, byteorder="big") ^ int.from_bytes(key, byteorder="big")
     out_l = r
     return out_l + out_r
 

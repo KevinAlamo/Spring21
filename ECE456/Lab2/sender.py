@@ -3,6 +3,7 @@ import sys
 from ECE456.Lab1 import encrypt
 
 
+# processes given ip
 def processIP(ip_addr):
     res = []
     dot = ip_addr.find(".")
@@ -23,8 +24,10 @@ def processIP(ip_addr):
     return rtn
 
 
+# calculates the total length
 def calcUdpLen():
     return len(info) * 2 + 8  # length of data in bytes and the rest of the header
+
 
 # calculate the checksum
 def checksum():
@@ -60,6 +63,7 @@ def checksum():
     return res
 
 
+# sets up the datagram that will be sent
 def setDatagram():
     datagram = []
     datagram.append(so_port.to_bytes(2, 'big'))
@@ -105,7 +109,7 @@ if __name__ == '__main__':
     info = encrypt.encrypt(info, keys)
     datag = setDatagram()
 
-    file = open(datagram_output, 'wb')
+    file = open(datagram_output, 'wb')  # writing to the file
     for c in datag:
         file.write(c)
     file.close()

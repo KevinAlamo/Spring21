@@ -2,6 +2,8 @@ import math
 import sys
 from ECE456.Lab1 import decrypt
 
+
+# separates the ip given
 def processIP(ip_addr):
     res = []
     dot = ip_addr.find(".")
@@ -22,11 +24,13 @@ def processIP(ip_addr):
     return rtn
 
 
+# calculates the total length
 def calcUdpLen():
     return (len(data) - 4) * 2 + 8  # length of data in bytes and the rest of the header
 
 
-def checksum():  # = psuedoh + sport + des_port + udpL + data + checksum(done at end)
+# calculates the checksum
+def checksum():  # = psuedoh + sport + des_port + udpL + data
     # psuedoh = sIP + dIP + zeros + protocol + udpL
     res = int(sIP, 2) + int(dIP, 2) + int.from_bytes(b'0', "big") + int.from_bytes(b'17', "big") + totL
     for i in range(0, 4):
@@ -34,7 +38,7 @@ def checksum():  # = psuedoh + sport + des_port + udpL + data + checksum(done at
     for d in f:
         res = res + int.from_bytes(d, "big")
 
-    mask = 0b1111111111111111
+    mask = 0b1111111111111111 # mask used to grab ls 16bits
     low16 = res & mask
     remainder = res >> 16
     while remainder > 0:

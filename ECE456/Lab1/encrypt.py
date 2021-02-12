@@ -1,6 +1,6 @@
 import sys
 
-
+# reads in the keys
 def readKeys(filename, perm):
     keyFile = open(filename, perm)
     keys = []
@@ -10,7 +10,7 @@ def readKeys(filename, perm):
     keyFile.close()
     return keys
 
-
+# reads in the data
 def readData(filename, perm):
     dataFile = open(filename, perm)
     data = []
@@ -23,6 +23,7 @@ def readData(filename, perm):
     return data
 
 
+# DES encryption method
 def desEncrypt(dat, key):
     l = dat[:1]
     r = dat[1:]
@@ -30,6 +31,7 @@ def desEncrypt(dat, key):
     out_r = out_r.to_bytes(1, byteorder="big")
     out_l = r
     return out_l + out_r
+
 
 # encrypts the data
 def encrypt(input_data, keys):
@@ -41,13 +43,14 @@ def encrypt(input_data, keys):
             odd = 1
         for key in keys:
             text = desEncrypt(text, key)
-        if odd == 1:
+        if odd == 1:  # removes the padding
             encrypted.append(text[:1])
         else:
             encrypted.append(text)
     return encrypted
 
 
+# writes to output file
 def outputFile(encrypted_text):
     file = open('encrypted_text.txt', 'wb')
     for c in encrypted_text:

@@ -10,6 +10,7 @@ def readKeys(filename, perm):
     keyFile.close()
     return keys
 
+
 def readData(filename, perm):
     dataFile = open(filename, perm)
     data = []

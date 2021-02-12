@@ -40,6 +40,13 @@ def decrypt(input_data, keys):
     return encrypted
 
 
+def outfile(decrypted_text):
+    file = open('decrypted_text.txt', 'wb')
+    for c in decrypted_text:
+        file.write(c)
+    file.close()
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         raise ValueError('No key or data file')
@@ -47,7 +54,4 @@ if __name__ == '__main__':
     keys = readKeys(sys.argv[1], 'rb')
     data = readData(sys.argv[2], 'rb')
     decrypted = decrypt(data, keys)
-    file = open('decrypted_text.txt', 'wb')
-    for c in decrypted:
-        file.write(c)
-    file.close()
+    outfile(decrypted)

@@ -1,3 +1,4 @@
+import math
 import sys
 from ECE456.Lab1 import encrypt
 
@@ -25,16 +26,55 @@ def processIP(ip_addr):
 def calcUdpLen():
     return len(info) * 2 + 8  # length of data in bytes and the rest of the header
 
+# calculate the checksum
+def checksum():
+    res = int(sIP, 2) + int(dIP, 2) + int.from_bytes(zeros, "big") + int.from_bytes(protocol, "big") + udpL
+    res = res + so_port + de_port + udpL
+    for d in info:
+        res = res + int.from_bytes(d, "big")
 
-def checksum():  # = psuedoh + sport + des_port + udpL + data + checksum(done at end)
-    # psuedoh = sIP + dIP + zeros + protocol + udpL
-    res =
+    mask = 0b1111111111111111
+    low16 = res & mask
+    remainder = res >> 16
+    while remainder > 0:
+        res = low16 + remainder
+        low16 = res & mask
+        remainder = res >> 16
+
+    # res = res + res
+    # low16 = res & mask
+    # remainder = res >> 16
+    # while remainder > 0:
+    #     res = low16 + remainder
+    #     low16 = res & mask
+    #     remainder = res >> 16
+
+    # calculating number of bits
+    # in the number
+    x = int(math.log2(res)) + 1
+
+    # Inverting the bits one by one
+    for i in range(x):
+        res = (res ^ (1 << i))
+
+    return res
+
+
+def setDatagram():
+    datagram = []
+    datagram.append(so_port.to_bytes(2, 'big'))
+    datagram.append(de_port.to_bytes(2, 'big'))
+    datagram.append(udpL.to_bytes(2, 'big'))
+    datagram.append(check.to_bytes(2, 'big'))
+    for x in info:
+        datagram.append(x)
+    return datagram
 
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 7:
-        raise ValueError('No key or data file')
+        raise ValueError('Incorrect num of args')
     # grabbing the arguments
     filename = sys.argv[1]
     sourceIP = sys.argv[2]
@@ -47,22 +87,22 @@ if __name__ == '__main__':
     dIP = processIP(destIP)
 
     so_port = int(so_port)
-    so_port = format(so_port, "016b")  # changing to 16 bit representation
     de_port = int(de_port)
-    de_port = format(de_port, "016b")
 
     info = encrypt.readData(filename, 'rb')
     udpL = calcUdpLen()  # number of bytes
-    udpL = format(udpL, "016b")  # changing to 16 bit representation
 
-    zeros = format(0, "08b")
-    protocol = format(17, "08b")
+    zeros = b'0'
+    protocol = b'17'
     # psuedoh = sIP + dIP + zeros + protocol + udpL
 
     # encrypt.encrypt(info, )
     # print(int(protocol, 2))
 
-    checksum()
+    check = checksum()
+    datag = setDatagram()
 
-
-
+    file = open(datagram_output, 'wb')
+    for c in datag:
+        file.write(c)
+    file.close()

@@ -31,17 +31,20 @@ def desEncrypt(dat, key):
     out_l = r
     return out_l + out_r
 
-
+# encrypts the data
 def encrypt(input_data, keys):
     encrypted = []
     odd = 0
     for text in input_data:
-        if len(text) == 1:
-            text = text + b''
+        if len(text) == 1:  # case for padding
+            text = text + b' '
             odd = 1
         for key in keys:
             text = desEncrypt(text, key)
-        encrypted.append(text)
+        if odd == 1:
+            encrypted.append(text[:1])
+        else:
+            encrypted.append(text)
     return encrypted
 
 

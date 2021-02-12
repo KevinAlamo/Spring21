@@ -33,10 +33,17 @@ def desDecrypt(data, key):
 
 def decrypt(input_data, keys):
     encrypted = []
+    odd = 0
     for data in input_data:
+        if len(data) == 1:  # case for padding
+            data = data + b' '
+            odd = 1
         for key in keys:
             data = desDecrypt(data, key)
-        encrypted.append(data)
+        if odd == 1:
+            encrypted.append(data[:1])
+        else:
+            encrypted.append(data)
     return encrypted
 
 

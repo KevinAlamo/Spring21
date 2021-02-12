@@ -45,6 +45,13 @@ def encrypt(input_data, keys):
     return encrypted
 
 
+def outputFile(encrypted_text):
+    file = open('encrypted_text.txt', 'wb')
+    for c in encrypted_text:
+        file.write(c)
+    file.close()
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 3:
         raise ValueError('No key or data file')
@@ -52,7 +59,4 @@ if __name__ == '__main__':
     keys = readKeys(sys.argv[1], 'rb')
     data = readData(sys.argv[2], 'rb')
     encrypted = encrypt(data, keys)
-    file = open('encrypted_text.txt', 'wb')
-    for c in encrypted:
-        file.write(c)
-    file.close()
+    outputFile(encrypted)

@@ -29,7 +29,9 @@ def calcUdpLen():
 def checksum():  # = psuedoh + sport + des_port + udpL + data + checksum(done at end)
     # psuedoh = sIP + dIP + zeros + protocol + udpL
     res = int(sIP, 2) + int(dIP, 2) + int.from_bytes(b'0', "big") + int.from_bytes(b'17', "big") + totL
-    for d in data:
+    for i in range(0, 4):
+        res = res + int.from_bytes(data[i], "big")
+    for d in f:
         res = res + int.from_bytes(d, "big")
 
     mask = 0b1111111111111111
@@ -78,6 +80,8 @@ if __name__ == '__main__':
     # grabbing data
     datagramFile = sys.argv[3]
     data = decrypt.readData(datagramFile, 'rb')  # read in file contents
+    keys = decrypt.readKeys('decryptKeys.txt', 'rb')
+    f = decrypt.decrypt(data[4:], keys)
     # getting udp header
     # so_port = data[0]
     # de_port = data[1]
@@ -85,7 +89,6 @@ if __name__ == '__main__':
     # check = data[3]
     totL = calcUdpLen()
     checksum()
-    keys = decrypt.readKeys('decryptKeys.txt', 'rb')
-    f = decrypt.decrypt(data[4:], keys)
+
     decrypt.outfile(f)
 

@@ -66,6 +66,7 @@ def setDatagram():
     datagram.append(de_port.to_bytes(2, 'big'))
     datagram.append(udpL.to_bytes(2, 'big'))
     datagram.append(check.to_bytes(2, 'big'))
+
     for x in info:
         datagram.append(x)
     return datagram
@@ -100,6 +101,8 @@ if __name__ == '__main__':
     # print(int(protocol, 2))
 
     check = checksum()
+    keys = encrypt.readKeys("encryptKeys.txt", 'rb')
+    info = encrypt.encrypt(info, keys)
     datag = setDatagram()
 
     file = open(datagram_output, 'wb')

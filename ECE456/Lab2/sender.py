@@ -26,14 +26,19 @@ def processIP(ip_addr):
 
 # calculates the total length
 def calcUdpLen():
-    return len(info) * 2 + 8  # length of data in bytes and the rest of the header
+    res = 0
+    for x in info:
+        res = res + len(x)
+    return res + 8  # length of data in bytes and the rest of the header
 
 
 # calculate the checksum
 def checksum():
-    res = int(sIP, 2) + int(dIP, 2) + int.from_bytes(zeros, "big") + int.from_bytes(protocol, "big") + udpL
+    res = int(sIP[:16], 2) + int(sIP[16:], 2) + int(dIP[:16], 2) + int(dIP[16:], 2) + 0 + 17 + udpL
     res = res + so_port + de_port + udpL
     for d in info:
+        if len(d) == 1:
+            d = d + b'\x00'
         res = res + int.from_bytes(d, "big")
 
     mask = 0b1111111111111111
@@ -76,6 +81,16 @@ def setDatagram():
     return datagram
 
 
+def addpadding(info):
+    dataLen = 0
+    for i in info:
+        dataLen = dataLen + len(i)
+
+    if dataLen%2 == 1:
+        info[len(info)-1] = info[len(info)-1] + b'\x00'
+
+
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 7:
@@ -96,17 +111,19 @@ if __name__ == '__main__':
 
     info = encrypt.readData(filename, 'rb')
     udpL = calcUdpLen()  # number of bytes
+    print("LENGTH: " + str(udpL))
 
-    zeros = b'0'
-    protocol = b'17'
     # psuedoh = sIP + dIP + zeros + protocol + udpL
 
     # encrypt.encrypt(info, )
     # print(int(protocol, 2))
 
-    check = checksum()
-    keys = encrypt.readKeys("encryptKeys.txt", 'rb')
+
+    keys = encrypt.readKeys("keyall1", 'rb')
     info = encrypt.encrypt(info, keys)
+    addpadding(info)
+    check = checksum()
+    print("THE CHECK: " + str(check))
     datag = setDatagram()
 
     file = open(datagram_output, 'wb')  # writing to the file

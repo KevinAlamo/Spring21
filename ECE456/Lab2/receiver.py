@@ -24,18 +24,17 @@ def processIP(ip_addr):
     return rtn
 
 
-# calculates the total length
-def calcUdpLen():
-    return (len(data) - 4) * 2 + 8  # length of data in bytes and the rest of the header
-
 
 # calculates the checksum
 def checksum():  # = psuedoh + sport + des_port + udpL + data
     # psuedoh = sIP + dIP + zeros + protocol + udpL
-    res = int(sIP, 2) + int(dIP, 2) + int.from_bytes(b'0', "big") + int.from_bytes(b'17', "big") + totL
+    res = int(sIP, 2) + int(dIP, 2) + 0 + 17 + int.from_bytes(udpL,"big")
     for i in range(0, 4):
         res = res + int.from_bytes(data[i], "big")
+
     for d in f:
+        if len(d) == 1:
+            d = d + b'\x00'
         res = res + int.from_bytes(d, "big")
 
     mask = 0b1111111111111111 # mask used to grab ls 16bits
@@ -67,9 +66,18 @@ def checksum():  # = psuedoh + sport + des_port + udpL + data
         so_port = str(int.from_bytes(data[0], "big"))
         de_port = str(int.from_bytes(data[1], "big"))
         print("Datagram from source-address " + sys.argv[1] + " source-port " + so_port + " to dest-address " +
-              sys.argv[2] + " dest-port " + de_port + "; Length " + str(totL) + " bytes.")
+              sys.argv[2] + " dest-port " + de_port + "; Length " + str(udpL) + " bytes.")
     else:
         raise ValueError('Checksum Error')
+
+
+def removepadding(f):
+    dataLen = 0
+    for i in f:
+        dataLen = dataLen + len(i)
+
+    if dataLen * 2 > int.from_bytes(udpL, "big") - 8:
+        f[len(f) - 1] = f[len(f) - 1][:1]
 
 
 if __name__ == '__main__':
@@ -84,15 +92,15 @@ if __name__ == '__main__':
     # grabbing data
     datagramFile = sys.argv[3]
     data = decrypt.readData(datagramFile, 'rb')  # read in file contents
-    keys = decrypt.readKeys('decryptKeys.txt', 'rb')
+    keys = decrypt.readKeys('keyall1', 'rb')
     f = decrypt.decrypt(data[4:], keys)
     # getting udp header
     # so_port = data[0]
     # de_port = data[1]
-    # udpL = data[2]
+    udpL = data[2]
     # check = data[3]
-    totL = calcUdpLen()
     checksum()
+    removepadding(f)
 
     decrypt.outfile(f)
 

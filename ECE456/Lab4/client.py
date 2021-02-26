@@ -7,8 +7,8 @@ if __name__ == '__main__':
     if len(sys.argv) != 4:
         raise ValueError('Incorrect num of args')
     sender.sIP = socket.gethostname()
-    print(type(sender.sIP))
-    if
+    if isinstance(sender.sIP, str):
+        print("worked")
     sender.dIP = sender.processIP(sys.argv[1])
     sender.de_port = int(sys.argv[2])
     sender.so_port = sender.de_port

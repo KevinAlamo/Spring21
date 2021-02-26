@@ -6,13 +6,16 @@ if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     if len(sys.argv) != 4:
         raise ValueError('Incorrect num of args')
-    sender.sIP = socket.gethostname()
+    sender.sIP = socket.gethostbyname(socket.gethostname())
     if isinstance(sender.sIP, str):
         print("worked")
-    sender.dIP = sender.processIP(sys.argv[1])
+    sender.dIP = sys.argv[1]
     sender.de_port = int(sys.argv[2])
     sender.so_port = sender.de_port
     s.bind((sender.sIP, sender.de_port)) # TODO change to dIP when done
+
+    sender.sIP = sender.processIP(sender.sIP)
+    sender.dIP = sender.processIP(sender.dIP)
 
     filename = sys.argv[3]
     datagram_output = "msg"
@@ -29,8 +32,8 @@ if __name__ == '__main__':
     keys = sender.encrypt.readKeys("keyall1", 'rb')
     info = sender.encrypt.encrypt(sender.info, keys)
     sender.addpadding(info)
-    check = sender.checksum()
-    print("THE CHECK: " + str(check))
+    sender.check = sender.checksum()
+    print("THE CHECK: " + str(sender.check))
     datag = sender.setDatagram()
 
     file = open(datagram_output, 'wb')  # writing to the file

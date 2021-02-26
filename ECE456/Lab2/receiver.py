@@ -92,7 +92,7 @@ if __name__ == '__main__':
     # grabbing data
     datagramFile = sys.argv[3]
     data = decrypt.readData(datagramFile, 'rb')  # read in file contents
-    keys = decrypt.readKeys('keyall1', 'rb')
+    keys = decrypt.readKeys('../Lab4/keyall1', 'rb')
     f = decrypt.decrypt(data[4:], keys)
     # getting udp header
     # so_port = data[0]

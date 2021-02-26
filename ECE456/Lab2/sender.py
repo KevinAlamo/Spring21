@@ -119,7 +119,7 @@ if __name__ == '__main__':
     # print(int(protocol, 2))
 
 
-    keys = encrypt.readKeys("keyall1", 'rb')
+    keys = encrypt.readKeys("../Lab4/keyall1", 'rb')
     info = encrypt.encrypt(info, keys)
     addpadding(info)
     check = checksum()

@@ -12,7 +12,7 @@ if __name__ == '__main__':
     sender.dIP = sys.argv[1]
     sender.de_port = int(sys.argv[2])
     sender.so_port = sender.de_port
-    s.bind((sender.sIP, sender.de_port)) # TODO change to dIP when done
+    s.bind((sender.sIP, sender.de_port))  # TODO change to dIP when done
 
     sender.sIP = sender.processIP(sender.sIP)
     sender.dIP = sender.processIP(sender.dIP)
@@ -23,11 +23,6 @@ if __name__ == '__main__':
     sender.info = sender.encrypt.readData(filename, 'rb')
     sender.udpL = sender.calcUdpLen()  # number of bytes
     print("LENGTH: " + str(sender.udpL))
-
-    # psuedoh = sIP + dIP + zeros + protocol + udpL
-
-    # encrypt.encrypt(info, )
-    # print(int(protocol, 2))
 
     keys = sender.encrypt.readKeys("keyall1", 'rb')
     info = sender.encrypt.encrypt(sender.info, keys)

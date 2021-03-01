@@ -18,8 +18,8 @@ if __name__ == '__main__':
     conn, address = server_socket.accept()  # accept new connection
     print("Connection from: " + str(address))
     while True:
-        # receive data stream. it won't accept data packet greater than 1024 bytes
-        data = conn.recv(1024).decode()
+        # receive data stream. it won't accept data packet greater than 250 bytes
+        data = conn.recv(250).decode()
         if not data:
             # if data is not received break
             break

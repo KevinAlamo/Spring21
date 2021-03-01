@@ -2,7 +2,9 @@ import socket
 import sys
 from ECE456.Lab2 import receiver
 
-def server_program():
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    receiver.sIP = socket.gethostbyname(socket.gethostname())
     # get the hostname
     host = socket.gethostname()
     port = 5000  # initiate port no above 1024
@@ -12,7 +14,7 @@ def server_program():
     server_socket.bind((host, port))  # bind host address and port together
 
     # configure how many client the server can listen simultaneously
-    server_socket.listen(2)
+    server_socket.listen(5)
     conn, address = server_socket.accept()  # accept new connection
     print("Connection from: " + str(address))
     while True:
@@ -26,14 +28,4 @@ def server_program():
         conn.send(data.encode())  # send data to the client
 
     conn.close()  # close the connection
-
-
-if __name__ == '__main__':
-    server_program()
-
-if __name__ == '__main__':
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    if len(sys.argv) != 4:
-        raise ValueError('Incorrect num of args')
-    receiver.sIP = socket.gethostbyname(socket.gethostname())
 

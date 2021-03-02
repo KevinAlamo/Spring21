@@ -1,9 +1,19 @@
 import socket
 import sys
-from ECE456.Lab2 import sender
+import sender
+import encrypt
+
+
+def sendMsg(msgs):
+    res = b''
+    for msg in msgs:
+        res = b"".join([res, msg])
+
+    return res
+
 
 if __name__ == '__main__':
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     if len(sys.argv) != 4:
         raise ValueError('Incorrect num of args')
     sender.sIP = socket.gethostbyname(socket.gethostname())
@@ -12,27 +22,28 @@ if __name__ == '__main__':
     sender.dIP = sys.argv[1]
     sender.de_port = int(sys.argv[2])
     sender.so_port = sender.de_port
-    s.bind((sender.sIP, sender.de_port))  # TODO change to dIP when done
 
     sender.sIP = sender.processIP(sender.sIP)
+    tempIP = sender.dIP
     sender.dIP = sender.processIP(sender.dIP)
 
     filename = sys.argv[3]
     datagram_output = "msg"
 
-    sender.info = sender.encrypt.readData(filename, 'rb')
+    sender.info = encrypt.readData(filename, 'rb')
     sender.udpL = sender.calcUdpLen()  # number of bytes
     print("LENGTH: " + str(sender.udpL))
 
-    keys = sender.encrypt.readKeys("keyall1", 'rb')
-    info = sender.encrypt.encrypt(sender.info, keys)
+    keys = encrypt.readKeys("keyall1", 'rb')
+    info = encrypt.encrypt(sender.info, keys)
     sender.addpadding(info)
     sender.check = sender.checksum()
     print("THE CHECK: " + str(sender.check))
     datag = sender.setDatagram()
+    datag = sendMsg(datag)
+    s.sendto(datag, (tempIP, sender.de_port))
+    s.settimeout(2)
 
-    file = open(datagram_output, 'wb')  # writing to the file
-    for c in datag:
-        file.write(c)
-    file.close()
-
+    response, addr = s.recvfrom(1024)
+    response = response.decode('utf-8')
+    print(response)

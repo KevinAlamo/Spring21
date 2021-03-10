@@ -79,6 +79,7 @@ if __name__ == '__main__':
             #     msgs[i] = msgs[i] + str(x)
 
             data = sendMsg(msgs)
+            print(data)
             i = i + 1
             server_socket.sendto(data.encode(), ())  # send data to the client
 

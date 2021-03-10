@@ -77,7 +77,7 @@ if __name__ == '__main__':
                 i = 0
             msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
             for x in receiver.f:
-                msgs[i] = msgs[i] + str(x)
+                msgs[i] = msgs[i] + x.decode("utf-8")
 
             data = sendMsg(msgs)
             print(data)

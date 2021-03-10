@@ -35,8 +35,8 @@ if __name__ == '__main__':
     print("LENGTH: " + str(sender.udpL))
 
     keys = encrypt.readKeys("keyall1", 'rb')
-    info = encrypt.encrypt(sender.info, keys)
-    sender.addpadding(info)
+    sender.info = encrypt.encrypt(sender.info, keys)
+    sender.addpadding(sender.info)
     sender.check = sender.checksum()
     print("THE CHECK: " + str(sender.check))
     datag = sender.setDatagram()

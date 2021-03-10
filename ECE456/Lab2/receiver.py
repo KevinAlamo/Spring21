@@ -76,7 +76,7 @@ def removepadding(f):
     for i in f:
         dataLen = dataLen + len(i)
 
-    if dataLen * 2 > int.from_bytes(udpL, "big") - 8:
+    if dataLen > int.from_bytes(udpL, "big") - 8:
         f[len(f) - 1] = f[len(f) - 1][:1]
 
 

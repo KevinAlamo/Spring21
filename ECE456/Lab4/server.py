@@ -70,7 +70,7 @@ if __name__ == '__main__':
             # de_port = data[1]
             receiver.udpL = receiver.data[2]
             # check = data[3]
-            # receiver.checksum() TODO
+            receiver.checksum()
             receiver.removepadding(receiver.f)
 
             if i == 5:

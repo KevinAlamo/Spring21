@@ -50,8 +50,8 @@ if __name__ == '__main__':
         receiver.sIP = address
         print("Connection from: " + str(address))
         if not rcvdata:
-            conn.close()
-            conn, address = server_socket.recvfrom(250)
+
+            rcvdata, address = server_socket.recvfrom(250)
             receiver.sIP = address
             # if data is not received break
             # break
@@ -59,6 +59,7 @@ if __name__ == '__main__':
             print("from connected user: " + str(rcvdata))
 
             receiver.sIP = receiver.processIP(receiver.sIP[0])
+            tempIP = address[0]
             # grabbing data
             receiver.data = rcvdata
             receiver.data = prepdata(receiver.data)
@@ -74,14 +75,17 @@ if __name__ == '__main__':
 
             if i == 5:
                 i = 0
-            msgs[i] = "From IP: {ip} at time: {t}\n".format(ip=receiver.sIP, t=time.time()) + str(receiver.f)
-            # for x in receiver.f:
-            #     msgs[i] = msgs[i] + str(x)
+            msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
+            for x in receiver.f:
+                msgs[i] = msgs[i] + str(x)
 
             data = sendMsg(msgs)
             print(data)
             i = i + 1
-            server_socket.sendto(data.encode(), (address, port))  # send data to the client
+            test = address[1]
+            test2 = str.encode(data)
+            test3 = str(port)
+            server_socket.sendto(str.encode(data), (tempIP, address[1]))  # send data to the client
 
     # conn.close()  # close the connection
 

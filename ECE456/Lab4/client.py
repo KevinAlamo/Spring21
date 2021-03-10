@@ -42,7 +42,7 @@ if __name__ == '__main__':
     datag = sender.setDatagram()
     datag = sendMsg(datag)
     s.sendto(datag, (tempIP, sender.de_port))  # send the data
-    # s.settimeout(2)  # wait for response
+    s.settimeout(2)  # wait for response
 
     response, addr = s.recvfrom(1024)
     response = response.decode('utf-8')

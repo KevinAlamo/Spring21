@@ -81,7 +81,7 @@ if __name__ == '__main__':
             data = sendMsg(msgs)
             print(data)
             i = i + 1
-            server_socket.sendto(data.encode(), ())  # send data to the client
+            server_socket.sendto(data.encode(), (address, port))  # send data to the client
 
     # conn.close()  # close the connection
 

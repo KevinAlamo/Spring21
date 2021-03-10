@@ -1,7 +1,7 @@
 import socket
 import sys
-import sender
-import encrypt
+from ECE456.Lab2 import sender
+from ECE456.Lab1 import encrypt
 
 
 def sendMsg(msgs):
@@ -41,9 +41,10 @@ if __name__ == '__main__':
     print("THE CHECK: " + str(sender.check))
     datag = sender.setDatagram()
     datag = sendMsg(datag)
-    s.sendto(datag, (tempIP, sender.de_port))
-    s.settimeout(2)
+    s.sendto(datag, (tempIP, sender.de_port))  # send the data
+    # s.settimeout(2)  # wait for response
 
     response, addr = s.recvfrom(1024)
     response = response.decode('utf-8')
     print(response)
+    s.close()

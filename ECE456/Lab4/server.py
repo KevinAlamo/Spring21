@@ -1,6 +1,6 @@
 import socket
 import sys
-import receiver
+from ECE456.Lab2 import receiver
 import time
 
 def sendMsg(msgs):
@@ -69,15 +69,18 @@ if __name__ == '__main__':
             # de_port = data[1]
             receiver.udpL = receiver.data[2]
             # check = data[3]
-            receiver.checksum()
+            # receiver.checksum() TODO
             receiver.removepadding(receiver.f)
 
             if i == 5:
                 i = 0
-            msgs[i] = "From IP: {ip} at time: {t}\n".format(ip=receiver.dIP, t=time.time()) + receiver.f
+            msgs[i] = "From IP: {ip} at time: {t}\n".format(ip=receiver.sIP, t=time.time()) + str(receiver.f)
+            # for x in receiver.f:
+            #     msgs[i] = msgs[i] + str(x)
+
             data = sendMsg(msgs)
             i = i + 1
-            conn.send(data.encode())  # send data to the client
+            server_socket.sendto(data.encode(), ())  # send data to the client
 
     # conn.close()  # close the connection
 

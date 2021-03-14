@@ -1,5 +1,6 @@
 import socket
 import sys
+import time
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -10,7 +11,8 @@ if __name__ == '__main__':
 
     s.connect((host, port))
     filename = sys.argv[2]
-    s.send(bytes(filename))
+    s.send(bytes("testfile1.txt".encode()))
+    time.sleep(3)
     f = open(filename, 'rb')
     print('Sending...')
     dat = f.read(1024)
@@ -20,5 +22,4 @@ if __name__ == '__main__':
         dat = f.read(1024)
     f.close()
     print("Done Sending")
-    print(s.recv(1024))
     s.close  # Close the socket when done

@@ -1,6 +1,6 @@
 import socket
 import sys
-from ECE456.Lab2 import receiver
+import receiver
 import time
 
 def sendMsg(msgs):

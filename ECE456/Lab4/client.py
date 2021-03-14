@@ -1,7 +1,7 @@
 import socket
 import sys
-from ECE456.Lab2 import sender
-from ECE456.Lab1 import encrypt
+import sender
+import encrypt
 
 
 def sendMsg(msgs):

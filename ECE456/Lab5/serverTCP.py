@@ -17,9 +17,15 @@ if __name__ == '__main__':
         f = open(filename, 'wb')
         dat = c.recv(1024)
         while (dat):
-            print("Receiving...")
-            f.write(dat)
-            dat = c.recv(1024)
+            try:
+                print("Receiving...")
+                f.write(dat)
+                c.settimeout(2)  # wait for response
+                dat = c.recv(1024)
+            except socket.timeout:
+                break
+
         f.close()
         print("Done Receiving")
+        c.send("Successful Transfer".encode())
         c.close()                # Close the connection

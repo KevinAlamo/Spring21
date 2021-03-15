@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     s.connect((host, port))
     filename = sys.argv[2]
-    s.send(bytes("testfile1.txt".encode()))
+    s.send(bytes(filename.encode()))
     time.sleep(3)
     f = open(filename, 'rb')
     print('Sending...')
@@ -22,4 +22,5 @@ if __name__ == '__main__':
         dat = f.read(1024)
     f.close()
     print("Done Sending")
+    print(s.recv(1024).decode("utf-8"))
     s.close  # Close the socket when done

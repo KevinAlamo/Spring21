@@ -13,10 +13,22 @@ if __name__ == '__main__':
         print('Got connection from', addr)
         filename = c.recv(1024)  # read file name
         filename = filename.decode("utf-8")
-        print("Receiving file", filename)
-        f = open(filename, 'wb')
-        dat = c.recv(1024)
-        while (dat):
+        nfile = ""
+        for x in filename:
+            if x == '@':
+                break
+            nfile = nfile + x
+
+        print("Receiving file", nfile)
+        f = open(nfile, 'wb')
+        dat = 0
+        try:
+            f.write(filename[len(nfile)+1:].encode())
+            c.settimeout(2)  # wait for response
+            dat = c.recv(1024)
+        except socket.timeout:
+            pass
+        while dat:
             try:
                 print("Receiving...")
                 f.write(dat)

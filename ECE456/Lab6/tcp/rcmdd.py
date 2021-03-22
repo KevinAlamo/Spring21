@@ -17,10 +17,8 @@ if __name__ == '__main__':
     while True:
         c, addr = s.accept()     # Establish connection with client.
         print('Got connection from', addr)
-        filelen = c.recv(10)  # read file name
-        filelen = filelen.decode("ascii")
+        print("Receiving command")
 
-        print("Receiving command length:", filelen)
         f = open("tempfile.txt", 'wb')
 
         # import subprocess
@@ -28,8 +26,8 @@ if __name__ == '__main__':
         # p = subprocess.Popen("date", stdout=subprocess.PIPE, shell=True)
         # (output, err) = p.communicate()
         # print  "Today is", output
-        cmd = c.recv(int(filelen))
-        cmd = cmd.decode("utf-8")
+        cmd = c.recv(1024)
+        cmd = cmd.decode("ascii")
 
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         (output, err) = p.communicate()

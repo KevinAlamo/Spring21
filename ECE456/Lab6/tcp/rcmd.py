@@ -14,7 +14,7 @@ if __name__ == '__main__':
     execTime = sys.argv[3]
     delay = sys.argv[4]
     cmd = sys.argv[5]
-    cmdToSend = execTime + " " + delay + " " + cmd
+    cmdToSend = execTime + "@" + delay + "@" + cmd + "@"
 
     s.send(bytes(cmd.encode("ascii")))  # send the file name
     # time.sleep(3)

@@ -28,13 +28,21 @@ if __name__ == '__main__':
         # print  "Today is", output
         cmd = c.recv(1024)
         cmd = cmd.decode("ascii")
+        cmdArr = ["", "", ""]  # execTimes, execDelay, cmd
+        tempCnt = 0
+        for x in cmd:
+            if x == '@':
+                tempCnt = tempCnt + 1
+            if tempCnt == 3:
+                break
+            cmdArr[tempCnt] = cmdArr[tempCnt] + x
 
-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-        (output, err) = p.communicate()
-        output = str(output)
-        for c in output:
-            f.write(bytes(c, "utf-8"))
-
+        for i in range(0, int(cmdArr[0])):
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+            (output, err) = p.communicate()
+            output = str(output)
+            for c in output:
+                f.write(bytes(c, "ascii"))
 
         f.close()
         print("Done Receiving")

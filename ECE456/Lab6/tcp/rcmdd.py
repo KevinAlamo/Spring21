@@ -1,7 +1,7 @@
 import socket
 import sys
 import subprocess
-
+import time
 
 if __name__ == '__main__':
 
@@ -38,11 +38,13 @@ if __name__ == '__main__':
             cmdArr[tempCnt] = cmdArr[tempCnt] + x
 
         for i in range(0, int(cmdArr[0])):
-            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+            p = subprocess.Popen(cmdArr[2], stdout=subprocess.PIPE, shell=True)
             (output, err) = p.communicate()
             output = str(output)
             for c in output:
                 f.write(bytes(c, "ascii"))
+
+            time.sleep(cmdArr[1])
 
         f.close()
         print("Done Receiving")

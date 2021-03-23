@@ -44,6 +44,7 @@ if __name__ == '__main__':
             for c in output:
                 f.write(bytes(c, "ascii"))
 
+            f.write(bytes('\n', "ascii"))
             time.sleep(cmdArr[1])
 
         f.close()

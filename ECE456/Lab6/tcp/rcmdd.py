@@ -17,6 +17,7 @@ if __name__ == '__main__':
     while True:
         c, addr = s.accept()     # Establish connection with client.
         print('Got connection from', addr)
+        print("Status = Connected")
         print("Receiving command")
 
         f = open("tempfile.txt", 'wb')
@@ -47,8 +48,15 @@ if __name__ == '__main__':
             time.sleep(cmdArr[1])
 
         f.close()
+        toSend = ''
         f = open("tempfile.txt", 'rb')
+        while (True):
+            d = f.read(2)
+            if d == b'':
+                break
+            toSend += d
 
+        c.send(toSend)
         print("Done Receiving")
-        c.send("Successful Transfer".encode())
+        print("Status = Disconnected")
         c.close()                # Close the connection

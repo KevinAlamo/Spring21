@@ -47,6 +47,8 @@ if __name__ == '__main__':
             time.sleep(cmdArr[1])
 
         f.close()
+        f = open("tempfile.txt", 'rb')
+
         print("Done Receiving")
         c.send("Successful Transfer".encode())
         c.close()                # Close the connection

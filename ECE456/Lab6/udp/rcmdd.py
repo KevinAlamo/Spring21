@@ -9,7 +9,6 @@ def sendMsg(msgs):
         res = res + msg
 
     return res
-# -i scp command, client
 
 def prepdata(data):
     prev = 0
@@ -41,12 +40,10 @@ if __name__ == '__main__':
     receiver.dIP = socket.gethostbyname(socket.gethostname())
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # get instance
-    # look closely. The bind() function takes tuple as argument
+
     server_socket.bind((host, port))  # bind host address and port together
     print(receiver.dIP)
     receiver.dIP = receiver.processIP(receiver.dIP)
-    msgs = ['','','','', '']  # 5 msgs total
-    i = 0
     receiver.keys = receiver.decrypt.readKeys('../Lab4/keyall1', 'rb')
     while True:
         # receive data stream. it won't accept data packet greater than 250 bytes
@@ -69,25 +66,19 @@ if __name__ == '__main__':
             receiver.data = prepdata(receiver.data)
 
             receiver.f = receiver.decrypt.decrypt(receiver.data[4:], receiver.keys)
-            # getting udp header
-            # so_port = data[0]
-            # de_port = data[1]
             receiver.udpL = receiver.data[2]
-            # check = data[3]
+
             receiver.checksum()
             receiver.removepadding(receiver.f)
 
-            if i == 5:
-                i = 0
-            msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
+            # msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
+            temp = ""
             for x in receiver.f:
-                msgs[i] = msgs[i] + x.decode("utf-8")
+                temp = temp + x.decode("utf-8")
 
-            data = sendMsg(msgs)
-            print(data)
-            i = i + 1
-            test = address[1]
-            test2 = str.encode(data)
-            test3 = str(port)
-            server_socket.sendto(str.encode(data), (tempIP, address[1]))  # send data to the client
+            # data = sendMsg(msgs)
+            # test = address[1]
+            # test2 = str.encode(data)
+            # test3 = str(port)
+            # server_socket.sendto(str.encode(data), (tempIP, address[1]))  # send data to the client
 

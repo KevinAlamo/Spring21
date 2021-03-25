@@ -18,8 +18,9 @@ if __name__ == '__main__':
 
     s.send(bytes(cmdToSend.encode("ascii")))  # send the file name
     # time.sleep(3)
-
     filelen = s.recv(10)  # read length of message
+    while filelen == b'':
+        filelen = s.recv(10)
     filelen = filelen.decode("ascii")
 
     temp = s.recv(int(filelen))

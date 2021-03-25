@@ -38,8 +38,8 @@ if __name__ == '__main__':
             p = subprocess.Popen(cmdArr[2], stdout=subprocess.PIPE, shell=True)
             (output, err) = p.communicate()
             output = str(output)
-            for c in output:
-                f.write(bytes(c, "ascii"))
+            for cha in output:
+                f.write(bytes(cha, "ascii"))
 
             f.write(bytes('\n', "ascii"))
             time.sleep(int(cmdArr[1]))

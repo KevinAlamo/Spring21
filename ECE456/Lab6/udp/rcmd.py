@@ -11,6 +11,22 @@ def sendMsg(msgs):
 
     return res
 
+def prepdata(data):
+    prev = 0
+    res = []
+    num = 0
+    s = b''
+    for i in data:
+        temp = i.encode("ascii")
+        s = b''.join([s, temp])
+        if num == 1:
+            res.append(s)
+            num = 0
+            s = b''
+        else:
+            num = num+1
+
+    return res
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -27,7 +43,8 @@ if __name__ == '__main__':
     tempIP = sender.dIP
     sender.dIP = sender.processIP(sender.dIP)
 
-    sender.info = sys.argv[3] + sys.argv[4] + sys.argv[5]
+    sender.info = sys.argv[3] + "@" + sys.argv[4] + "@" + sys.argv[5] + "@"
+    sender.info = prepdata(sender.info)
     sender.udpL = sender.calcUdpLen()  # number of bytes
     print("LENGTH: " + str(sender.udpL))
 

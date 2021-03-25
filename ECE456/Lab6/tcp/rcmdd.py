@@ -29,9 +29,10 @@ if __name__ == '__main__':
         for x in cmd:
             if x == '@':
                 tempCnt = tempCnt + 1
-            if tempCnt == 3:
+            elif tempCnt == 3:
                 break
-            cmdArr[tempCnt] = cmdArr[tempCnt] + x
+            else:
+                cmdArr[tempCnt] = cmdArr[tempCnt] + x
 
         for i in range(0, int(cmdArr[0])):
             p = subprocess.Popen(cmdArr[2], stdout=subprocess.PIPE, shell=True)
@@ -41,7 +42,7 @@ if __name__ == '__main__':
                 f.write(bytes(c, "ascii"))
 
             f.write(bytes('\n', "ascii"))
-            time.sleep(cmdArr[1])
+            time.sleep(int(cmdArr[1]))
 
         f.close()
         toSend = ''
@@ -50,7 +51,7 @@ if __name__ == '__main__':
             d = f.read(2)
             if d == b'':
                 break
-            toSend += d
+            toSend += d.decode("utf-8")
         sizeToSend = str(len(toSend))
         while len(sizeToSend.encode("ascii")) < 10:
             sizeToSend += " "

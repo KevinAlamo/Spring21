@@ -29,6 +29,13 @@ def prepdata(data):
     return res
 
 
+def decoding(inputDat):
+    res = ""
+    for y in inputDat:
+        res += y.decode("ascii")
+    return res
+
+
 if __name__ == '__main__':
 
     if len(sys.argv) != 2:
@@ -36,7 +43,7 @@ if __name__ == '__main__':
 
     # get the hostname
     host = socket.gethostname()
-    port = sys.argv[1]  # initiate port no above 1024
+    port = int(sys.argv[1])  # initiate port no above 1024
 
     receiver.dIP = socket.gethostbyname(socket.gethostname())
 
@@ -45,7 +52,7 @@ if __name__ == '__main__':
     server_socket.bind((host, port))  # bind host address and port together
     print(receiver.dIP)
     receiver.dIP = receiver.processIP(receiver.dIP)
-    receiver.keys = receiver.decrypt.readKeys('../Lab4/keyall1', 'rb')
+    receiver.keys = receiver.decrypt.readKeys('keyall1', 'rb')
     while True:
         # receive data stream. it won't accept data packet greater than 250 bytes
         rcvdata, address = server_socket.recvfrom(250)  # accept new connection
@@ -69,7 +76,7 @@ if __name__ == '__main__':
             receiver.f = receiver.decrypt.decrypt(receiver.data[4:], receiver.keys)
             receiver.udpL = receiver.data[2]
 
-            receiver.checksum()
+            # receiver.checksum() TODO
             receiver.removepadding(receiver.f)
 
             # msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())
@@ -80,12 +87,14 @@ if __name__ == '__main__':
             tempFile = open("tempfile.txt", 'wb')
             cmdArr = ["", "", ""]  # execTimes, execDelay, cmd
             tempCnt = 0
+            receiver.f = decoding(receiver.f)
             for x in receiver.f:
                 if x == '@':
                     tempCnt = tempCnt + 1
-                if tempCnt == 3:
+                elif tempCnt == 3:
                     break
-                cmdArr[tempCnt] = cmdArr[tempCnt] + x
+                else:
+                    cmdArr[tempCnt] = cmdArr[tempCnt] + x
 
             for i in range(0, int(cmdArr[0])):
                 p = subprocess.Popen(cmdArr[2], stdout=subprocess.PIPE, shell=True)
@@ -95,7 +104,7 @@ if __name__ == '__main__':
                     tempFile.write(bytes(c, "ascii"))
 
                 tempFile.write(bytes('\n', "ascii"))
-                time.sleep(cmdArr[1])
+                time.sleep(int(cmdArr[1]))
 
             tempFile.close()
 
@@ -105,7 +114,7 @@ if __name__ == '__main__':
                 d = tempFile.read(2)
                 if d == b'':
                     break
-                toSend += d
+                toSend += d.decode("utf-8")
 
             # data = sendMsg(msgs)
             # test = address[1]

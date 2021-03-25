@@ -76,7 +76,7 @@ if __name__ == '__main__':
             receiver.f = receiver.decrypt.decrypt(receiver.data[4:], receiver.keys)
             receiver.udpL = receiver.data[2]
 
-            # receiver.checksum() TODO
+            receiver.checksum()
             receiver.removepadding(receiver.f)
 
             # msgs[i] = "\nFrom IP: {ip} at time: {t}\n".format(ip=tempIP, t=time.time())

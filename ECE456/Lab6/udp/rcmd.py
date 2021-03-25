@@ -14,12 +14,12 @@ def sendMsg(msgs):
 
 if __name__ == '__main__':
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 6:
         raise ValueError('Incorrect num of args')
     sender.sIP = socket.gethostbyname(socket.gethostname())
     # if isinstance(sender.sIP, str):
     #     print("worked")
-    sender.dIP = sys.argv[1]
+    sender.dIP = socket.gethostbyname(sys.argv[1])
     sender.de_port = int(sys.argv[2])
     sender.so_port = sender.de_port
 
@@ -27,10 +27,7 @@ if __name__ == '__main__':
     tempIP = sender.dIP
     sender.dIP = sender.processIP(sender.dIP)
 
-    filename = sys.argv[3]
-    datagram_output = "msg"
-
-    sender.info = encrypt.readData(filename, 'rb')
+    sender.info = sys.argv[3] + sys.argv[4] + sys.argv[5]
     sender.udpL = sender.calcUdpLen()  # number of bytes
     print("LENGTH: " + str(sender.udpL))
 

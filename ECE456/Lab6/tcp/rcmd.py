@@ -22,5 +22,5 @@ if __name__ == '__main__':
     filelen = s.recv(10)  # read length of message
     filelen = filelen.decode("ascii")
 
-    print(s.recv(int(filelen)).decode("ascii"))  # receive confirmation
+    print(s.recv(int(filelen)).decode("utf-8"))  # receive info
     s.close  # Close the socket when done

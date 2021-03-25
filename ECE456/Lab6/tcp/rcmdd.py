@@ -22,11 +22,6 @@ if __name__ == '__main__':
 
         f = open("tempfile.txt", 'wb')
 
-        # import subprocess
-        #
-        # p = subprocess.Popen("date", stdout=subprocess.PIPE, shell=True)
-        # (output, err) = p.communicate()
-        # print  "Today is", output
         cmd = c.recv(1024)
         cmd = cmd.decode("ascii")
         cmdArr = ["", "", ""]  # execTimes, execDelay, cmd
@@ -56,8 +51,12 @@ if __name__ == '__main__':
             if d == b'':
                 break
             toSend += d
+        sizeToSend = str(len(toSend))
+        while len(sizeToSend.encode("ascii")) < 10:
+            sizeToSend += " "
 
-        c.send(toSend)
+        c.send(sizeToSend.encode("ascii"))
+        c.send(toSend.encode("utf-8"))
         print("Done Receiving")
         print("Status = Disconnected")
         c.close()                # Close the connection
